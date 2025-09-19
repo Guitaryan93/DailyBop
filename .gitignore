@@ -21,3 +21,9 @@ Thumbs.db
 # Logs
 *.log
 
+# Documentation to ignore
+docs.txt
+
+# Project Database should NEVER be on GitHub Repo
+database/
+database.db
