@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>Daily Bop</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Daily Bop</h1>
+            <em>Music you won’t find in the algorithm.</em>
+        </div>
+
+        <!-- Music Card -->
+        <div class="card">
+            {% if artist %}
+                <img src={{ artist.img_url }} alt="artist image" />
+                <h2>{{ artist.name }}</h2>
+                <a href={{ artist.url }} target="_blank">Listen on YouTube Music</a>
+            {% else %}
+                <h2>Oops... Something went wrong.</h2>
+                <p>Try again tomorrow...</p>
+            {% endif %}
+        </div>
+
+        <!-- Signup -->
+        <div class="signup">
+            <h3>Want new music in your inbox?</h3>
+            <p>Submit your email address to get a new music artist sent to you every day! No spam, no ads, just new music!</p>
+
+            <!-- embedded form from FormKeep. Data is sent to FormKeep, then emailed to dailybop123@gmail.com each day. -->
+            <div id="formkeep-embed" data-formkeep-url="https://formkeep.com/p/d8e9040f077144ce93ad001b0f269e9b?embedded=1"></div>
+
+            <script type="text/javascript" src="https://pym.nprapps.org/pym.v1.min.js"></script>
+            <script type="text/javascript" src="https://cdn.formkeep.com/formkeep-embed.js"></script>
+            
+            <!-- Get notified when the form is submitted, add your own code below: -->
+            <script>
+                const formkeepEmbed = document.querySelector('#formkeep-embed')
+                
+                formkeepEmbed.addEventListener('formkeep-embed:submitting', _event => {
+                  console.log('Submitting form...')
+                })
+                
+                formkeepEmbed.addEventListener('formkeep-embed:submitted', _event => {
+                  console.log('Submitted form...')
+                })
+            </script>
+        </div>
+    </div>
+</body>
+</html>
