@@ -80,7 +80,6 @@ class RandomGenerator():
             {"key": "amazonMusic", "label": "Amazon Music", "icon": "amazonmusic.svg"},
             {"key": "tidal", "label": "TIDAL", "icon": "tidal.svg"},
             {"key": "audiomack", "label": "Audiomack", "icon": "audiomack.svg"},
-            {"key": "boomplay", "label": "Boomplay", "icon": "boomplay.svg"},
         ]
     
         # Filter only services that exist in the API response
@@ -125,7 +124,6 @@ class RandomGenerator():
         amazonMusic = links_dict.get("amazonMusic")
         tidal = links_dict.get("tidal")
         audiomack = links_dict.get("audiomack")
-        boomplay = links_dict.get("boomplay")
 
         # write the new artist data to the database for the website to use
         conn = sqlite3.connect(self.DB_PATH)
@@ -149,15 +147,14 @@ class RandomGenerator():
             amazonMusic TEXT,
             tidal TEXT,
             audiomack TEXT,
-            boomplay TEXT,
             date_added DATE DEFAULT (DATE('now'))
         )
         """)
 
         cur.execute("""
         INSERT INTO random_artists
-        (name, song_title, thumbnail, YT_embed, youtube, youtubeMusic, appleMusic, spotify, pandora, deezer, soundcloud, amazonMusic, tidal, audiomack, boomplay)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (name, song_title, thumbnail, YT_embed, youtube, youtubeMusic, appleMusic, spotify, pandora, deezer, soundcloud, amazonMusic, tidal, audiomack)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             artist_name,
             song_title,
@@ -172,8 +169,7 @@ class RandomGenerator():
             soundcloud,
             amazonMusic,
             tidal,
-            audiomack ,
-            boomplay
+            audiomack
         ))
 
         conn.commit()

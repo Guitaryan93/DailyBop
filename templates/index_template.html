@@ -24,22 +24,19 @@
                 {% endif %}
                 <h2>{{ artist.name }}</h2>
                 <p>{{ artist.song_title }}</p>
-                <ul>
-                    <li><a href="{{ artist.youtubeMusic }}" target="_blank">Listen on YouTube Music</a></li>
-                    <li><a href="{{ artist.appleMusic }}" target="_blank">Listen on Apple Music</a></li>
-                    <li><a href="{{ artist.spotify }}" target="_blank">Listen on Spotify</a></li>
-                    <li><a href="{{ artist.pandora }}" target="_blank">Listen on Pandora</a></li>
-                    <li><a href="{{ artist.deezer }}" target="_blank">Listen on Deezer</a></li>
-                    <li><a href="{{ artist.soundcloud }}" target="_blank">Listen on SoundCloud</a></li>
-                    <li><a href="{{ artist.amazonMusic }}" target="_blank">Listen on Amazon Music</a></li>
-                    <li><a href="{{ artist.tidal }}" target="_blank">Listen on Tidal</a></li>
-                    <li><a href="{{ artist.audiomack }}" target="_blank">Listen on Audiomack</a></li>
-                    <li><a href="{{ artist.boomplay }}" target="_blank">Listen on Boomplay</a></li>
-                </ul>
             {% else %}
                 <h2>Oops... Something went wrong.</h2>
                 <p>Try again tomorrow...</p>
             {% endif %}
+        </div>
+
+        <!-- Streaming Services SVG Link Icons -->
+        <div class="card">
+            {% for s in svg_list %}
+                <a href="{{ s.url }}" target="_blank" title="{{ s.name }}">
+                    <img src="{{ s.svg }}" alt="{{ s.service }} icon"/>
+                </a>
+            {% endfor %}
         </div>
 
     </div>

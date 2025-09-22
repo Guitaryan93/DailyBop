@@ -10,7 +10,7 @@ class App:
         self.BASE_DIR = Path(__file__).resolve().parent
         self.DB_PATH = self.BASE_DIR/"database"/"database.db"
         self.TEMPLATES_PATH = self.BASE_DIR/"templates"
-        self.artist = self.get_artist_data()
+        self.artist, self.svg_list = self.get_artist_data()
         self.build_HTML()
         
     def get_artist_data(self):
@@ -27,17 +27,31 @@ class App:
         # Wrap the row into a dictionary
         artist_dict = dict(row)
 
+        # Pull the SVG images from the SVG DB Table
+        svg_map = dict(cursor.execute("SELECT service, svg FROM svgs").fetchall())
+
         # Close the DB connection
         conn.close()
 
-        return artist_dict
+        # Match up the SVG icons to the streaming service URLs
+        streaming_services = []
+        for service, svg in svg_map.items():
+            url = artist_dict[service]  # Use the column name to grab the URL
+            if url:
+                streaming_services.append({
+                    "name": service,
+                    "url": url,
+                    "svg": svg
+                })
+
+        return artist_dict, streaming_services
 
     def build_HTML(self):
         ''' build the HTML file using the artist data '''
         env = Environment(loader=FileSystemLoader(self.TEMPLATES_PATH))
         template = env.get_template("index_template.html")
 
-        html_output = template.render(artist=self.artist)
+        html_output = template.render(artist=self.artist, svg_list=self.svg_list)
 
         # Save HTML output
         with open(self.BASE_DIR/"index.html", "w", encoding="utf-8") as f:
