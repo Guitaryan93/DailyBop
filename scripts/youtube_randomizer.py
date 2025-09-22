@@ -16,9 +16,17 @@ class RandomGenerator():
         self.DB_PATH = self.BASE_DIR/".."/"database"/"database.db"
         eng_dict = self.load_english_dictionary()
         self.search_string = self.generate_search_string(eng_dict)
-        self.random_result = self.select_random_result()
+        self.random_result = self.call_YT_API()
         self.get_streaming_services_urls()
-        #self.write_to_db()
+
+        #for k, v in self.random_result.items():
+        #    print(k, v)
+
+        #print("\n\n==========================================================================\n\n")
+
+        #print(json.dumps(self.random_result, indent=4))
+
+        self.write_to_db()
 
     def load_english_dictionary(self):
         ''' load large file of all english words and then pare it down to
@@ -34,36 +42,17 @@ class RandomGenerator():
         return search_string[0:5]
 
     def call_YT_API(self):
-        ''' call the YouTube Music API and return a list of results '''
-        song_search_results = self.ytmusic.search(self.search_string, "songs", limit=200)
+        ''' call the YouTube Music API, pull a random artist, update the data with
+            the YouTube Music Video URL (used to call songlink API next) '''
+        YTMusicAPIdata = self.ytmusic.search(self.search_string, "songs", limit=200)
+        random_artist = YTMusicAPIdata[randint(0,len(YTMusicAPIdata) - 1)]
+        random_artist.update({"YT_url": f"https://music.youtube.com/watch?v={random_artist.get('videoId')}",
+                              "YT_embed": f"https://www.youtube.com/embed/{random_artist.get('videoId')}"})
 
-        #print(song_search_results[0])
+        #for k, v in random_artist.items():
+        #    print(k, v)
 
-        results_list = []
-        for song in song_search_results:
-            results_list.append([song["artists"][0]["name"] + " - " + song["title"],
-                                 song["thumbnails"][-1]["url"],
-                                 song["videoId"]])
-        
-        return results_list
-
-    def select_random_result(self):
-        ''' select a random artist from the api response data. if no data is available
-            then the api is called again until data exists to choose from '''
-        api_data = []
-        while len(api_data) == 0:
-            api_data = self.call_YT_API()
-
-        # Choose an artist from the list
-        random_selection = api_data[randint(0,len(api_data) - 1)]
-        # Build and append the YTMusic URL
-        random_selection.append(f"https://music.youtube.com/watch?v={random_selection[2]}")
-
-        # Debug Printing
-        #for i in range(0, len(random_selection)):
-        #    print(i, "-", random_selection[i])
-
-        return random_selection
+        return random_artist
 
     def get_streaming_services_urls(self):
         ''' call song.link API to get all other major streaming services URLs
@@ -73,7 +62,7 @@ class RandomGenerator():
             3. YTMusic = WORST (default if no other results are available) '''
         url = "https://api.song.link/v1-alpha.1/links"
         params = {
-            "url": self.random_result[3],
+            "url": self.random_result.get("YT_url"),
             "userCountry": "CA",
             "songIfSingle": "true"
         }
@@ -111,17 +100,81 @@ class RandomGenerator():
             uid = data["linksByPlatform"]["amazonMusic"]["entityUniqueId"]
             thumbnail = entities.get(uid, {}).get("thumbnailUrl")
         if not thumbnail:
-            thumbnail = self.random_result[1]
+            thumbnail = self.random_result["thumbnails"][-1]["url"]
 
-        self.random_result.append({"links": links, "thumbnail": thumbnail})
+        self.random_result.update({"links": links, "thumbnail": thumbnail})
 
     def write_to_db(self):
-        ''' write the new artist data to the database for the website to use '''
+        ''' pull out the data we need for our DB record and write it to the DB '''
+        artist_name = self.random_result["artists"][0]["name"]
+        song_title = self.random_result.get("title")
+        thumbnail = self.random_result.get("thumbnail")
+        YT_embed = self.random_result.get("YT_embed")
+
+        # Turn links list into a dict of {key: url}
+        links_dict = {link["key"]: link["url"] for link in self.random_result.get("links", [])}
+        
+        # Extract each service (return None if missing)
+        youtube  = links_dict.get("youtube")
+        youtubeMusic = links_dict.get("youtubeMusic")
+        appleMusic = links_dict.get("appleMusic")
+        spotify  = links_dict.get("spotify")
+        pandora = links_dict.get("pandora")
+        deezer   = links_dict.get("deezer")
+        soundcloud = links_dict.get("soundcloud")
+        amazonMusic = links_dict.get("amazonMusic")
+        tidal = links_dict.get("tidal")
+        audiomack = links_dict.get("audiomack")
+        boomplay = links_dict.get("boomplay")
+
+        # write the new artist data to the database for the website to use
         conn = sqlite3.connect(self.DB_PATH)
         cur = conn.cursor()
 
-        # Insert the artist data
-        cur.execute("INSERT INTO random_artists (name, img_url, url) VALUES (?, ?, ?)", (self.random_result[0], self.random_result[1], self.random_result[2]))
+        # Setup the DB table if it doesn't already exist
+        cur.execute("""
+        CREATE TABLE IF NOT EXISTS random_artists (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            song_title TEXT,
+            thumbnail TEXT,
+            YT_embed TEXT,
+            youtube TEXT,
+            youtubeMusic TEXT,
+            appleMusic TEXT,
+            spotify TEXT,
+            pandora TEXT,
+            deezer TEXT,
+            soundcloud TEXT,
+            amazonMusic TEXT,
+            tidal TEXT,
+            audiomack TEXT,
+            boomplay TEXT,
+            date_added DATE DEFAULT (DATE('now'))
+        )
+        """)
+
+        cur.execute("""
+        INSERT INTO random_artists
+        (name, song_title, thumbnail, YT_embed, youtube, youtubeMusic, appleMusic, spotify, pandora, deezer, soundcloud, amazonMusic, tidal, audiomack, boomplay)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            artist_name,
+            song_title,
+            thumbnail,
+            YT_embed,
+            youtube,
+            youtubeMusic,
+            appleMusic,
+            spotify,
+            pandora,
+            deezer,
+            soundcloud,
+            amazonMusic,
+            tidal,
+            audiomack ,
+            boomplay
+        ))
 
         conn.commit()
         conn.close()

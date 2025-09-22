@@ -17,39 +17,31 @@
         <!-- Music Card -->
         <div class="card">
             {% if artist %}
-                <img src={{ artist.img_url }} alt="artist image" />
+                {% if artist.YT_embed %}
+                    <iframe width="420" height="315" src="{{ artist.YT_embed }}" ></iframe>
+                {% elif artist.thumbnail %}
+                    <img src="{{ artist.thumbnail }}" alt="artist image" />
+                {% endif %}
                 <h2>{{ artist.name }}</h2>
-                <a href={{ artist.url }} target="_blank">Listen on YouTube Music</a>
+                <p>{{ artist.song_title }}</p>
+                <ul>
+                    <li><a href="{{ artist.youtubeMusic }}" target="_blank">Listen on YouTube Music</a></li>
+                    <li><a href="{{ artist.appleMusic }}" target="_blank">Listen on Apple Music</a></li>
+                    <li><a href="{{ artist.spotify }}" target="_blank">Listen on Spotify</a></li>
+                    <li><a href="{{ artist.pandora }}" target="_blank">Listen on Pandora</a></li>
+                    <li><a href="{{ artist.deezer }}" target="_blank">Listen on Deezer</a></li>
+                    <li><a href="{{ artist.soundcloud }}" target="_blank">Listen on SoundCloud</a></li>
+                    <li><a href="{{ artist.amazonMusic }}" target="_blank">Listen on Amazon Music</a></li>
+                    <li><a href="{{ artist.tidal }}" target="_blank">Listen on Tidal</a></li>
+                    <li><a href="{{ artist.audiomack }}" target="_blank">Listen on Audiomack</a></li>
+                    <li><a href="{{ artist.boomplay }}" target="_blank">Listen on Boomplay</a></li>
+                </ul>
             {% else %}
                 <h2>Oops... Something went wrong.</h2>
                 <p>Try again tomorrow...</p>
             {% endif %}
         </div>
 
-        <!-- Signup -->
-        <div class="signup">
-            <h3>Want new music in your inbox?</h3>
-            <p>Submit your email address to get a new music artist sent to you every day! No spam, no ads, just new music!</p>
-
-            <!-- embedded form from FormKeep. Data is sent to FormKeep, then emailed to dailybop123@gmail.com each day. -->
-            <div id="formkeep-embed" data-formkeep-url="https://formkeep.com/p/d8e9040f077144ce93ad001b0f269e9b?embedded=1"></div>
-
-            <script type="text/javascript" src="https://pym.nprapps.org/pym.v1.min.js"></script>
-            <script type="text/javascript" src="https://cdn.formkeep.com/formkeep-embed.js"></script>
-            
-            <!-- Get notified when the form is submitted, add your own code below: -->
-            <script>
-                const formkeepEmbed = document.querySelector('#formkeep-embed')
-                
-                formkeepEmbed.addEventListener('formkeep-embed:submitting', _event => {
-                  console.log('Submitting form...')
-                })
-                
-                formkeepEmbed.addEventListener('formkeep-embed:submitted', _event => {
-                  console.log('Submitted form...')
-                })
-            </script>
-        </div>
     </div>
 </body>
 </html>
