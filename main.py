@@ -28,20 +28,27 @@ class App:
         artist_dict = dict(row)
 
         # Pull the SVG images from the SVG DB Table
-        svg_map = dict(cursor.execute("SELECT service, svg FROM svgs").fetchall())
+        cursor.execute("SELECT service, svg, display_name FROM svgs")
+        svg_rows = cursor.fetchall()
 
         # Close the DB connection
         conn.close()
 
         # Match up the SVG icons to the streaming service URLs
         streaming_services = []
-        for service, svg in svg_map.items():
-            url = artist_dict[service]  # Use the column name to grab the URL
+        for svg_row in svg_rows:
+            service = svg_row["service"]
+            svg = svg_row["svg"]
+            display_name = svg_row["display_name"]
+
+            # The column in the artist_dict should match "service"
+            url = artist_dict.get(service)
             if url:
                 streaming_services.append({
                     "name": service,
                     "url": url,
-                    "svg": svg
+                    "svg": svg,
+                    "display_name": display_name
                 })
 
         return artist_dict, streaming_services

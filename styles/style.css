@@ -150,3 +150,27 @@ body {
   }
 }
 
+/* Grid for displaying SVG icons */
+.grid-icons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+    justify-items: center;
+    align-items: center;
+    text-align: center;
+}
+.grid-icons a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+}
+.grid-icons img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 6px;
+    transition: transform 0.2s;
+}
+.grid-icons a:hover img {
+    transform: scale(1.1);
+}
