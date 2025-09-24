@@ -15,6 +15,11 @@
             <h1>Daily Bop</h1>
             <em>Music you won’t find in the algorithm.</em>
         </div>
+        
+        <!-- blurb -->
+        <div class="card">
+            <p class="blurb"><strong>Welcome to Daily Bop</strong> — every day we spotlight one fresh artist you won’t find in the algorithm, so you can discover hidden gems and expand your sound.</p>
+        </div>
 
         <!-- Music Card -->
         <div class="card">
@@ -49,6 +54,7 @@
 
         <!-- Streaming Services SVG Link Icons -->
         <div class="card">
+            <h3>Choose where to listen</h3>
             <div class="grid-icons">
                 {% for s in svg_list %}
                     <a href="{{ s.url }}" target="_blank" title="{{ s.name }}">
