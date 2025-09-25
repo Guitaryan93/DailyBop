@@ -223,3 +223,10 @@ body {
 .songlink {
     font-size: 0.6em
 }
+
+/* Neocities Hosting image */
+.corner-img {
+  max-width: 90px;
+  margin: 10px 0 10px 0;
+}
+
