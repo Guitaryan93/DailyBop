@@ -3,7 +3,6 @@
 **Daily Bop** is a simple web app that helps you **discover new music every day**—outside of the algorithms.
 Each day, the site randomly selects a music artist and shares links to listen across all major streaming platforms.
 
----
 
 ## 🌟 Features
 
@@ -18,7 +17,6 @@ Each day, the site randomly selects a music artist and shares links to listen ac
   * …and more!
 * 🐍 **Automated Backend** – A Python script fetches a random artist using **YouTube Music’s API**, then retrieves cross-platform links.
 
----
 
 ## 🚀 How It Works
 
@@ -29,7 +27,6 @@ Each day, the site randomly selects a music artist and shares links to listen ac
 3. **Daily Update**
    The site refreshes daily to feature a brand-new artist.
 
----
 
 ## 🛠️ Tech Stack
 
@@ -38,15 +35,14 @@ Each day, the site randomly selects a music artist and shares links to listen ac
 * **Songlink API** – cross-platform streaming links
 * **HTML/CSS/JS and Jinja2** – building static frontend using templating logic
 
----
 
 ## ⚡ Getting Started (Development)
 
 1. **Clone the repo**
 
    ```bash
-   git clone https://github.com/
-   cd daily-bop
+   git clone https://github.com/Guitaryan93/DailyBop.git
+   cd DailyBop
    ```
 
 2. **Install dependencies**
@@ -76,13 +72,11 @@ Each day, the site randomly selects a music artist and shares links to listen ac
    python3 main.py
    ```
    
----
 
 ## 🌍 Live Site
 
 👉 [**Daily Bop**](https://dailybop.neocities.org/)
 
----
 
 ## 🤝 Contributing
 
@@ -94,7 +88,6 @@ If you’d like to contribute:
 3. Commit changes
 4. Open a Pull Request
 
----
 
 ## 📜 License
 
