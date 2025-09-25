@@ -27,3 +27,8 @@ docs.txt
 # Project Database should NEVER be on GitHub Repo
 database/
 database.db
+
+# Scripts used for publishing the site should not be public
+# They contain sensitive login data for my Neocities site
+scripts/upload.sh
+scripts/update_dailybop.sh
