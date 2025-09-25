@@ -32,3 +32,6 @@ database.db
 # They contain sensitive login data for my Neocities site
 scripts/upload.sh
 scripts/update_dailybop.sh
+
+# Stop tracking Vim swap files
+.*.sw[a-z]
