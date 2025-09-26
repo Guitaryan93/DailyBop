@@ -35,3 +35,5 @@ scripts/update_dailybop.sh
 
 # Stop tracking Vim swap files
 .*.sw[a-z]
+# Ignore ssl certs for testing environment
+*.pem
