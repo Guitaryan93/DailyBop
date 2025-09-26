@@ -14,8 +14,7 @@ class RandomGenerator():
         self.ytmusic = YTMusic()
         self.BASE_DIR = Path(__file__).resolve().parent
         self.DB_PATH = self.BASE_DIR/".."/"database"/"database.db"
-        eng_dict = self.load_english_dictionary()
-        self.search_string = self.generate_search_string(eng_dict)
+        self.eng_dict = self.load_english_dictionary()
         self.random_result = self.call_YT_API()
         self.get_streaming_services_urls()
 
@@ -35,22 +34,24 @@ class RandomGenerator():
             eng_dictionary = json.load(file)
         return list(eng_dictionary.keys())
 
-    def generate_search_string(self, wordlist):
+    def generate_search_string(self):
         ''' generate a 5 character string to use as a search term with
             YouTube Music API '''
-        search_string = wordlist[randint(0, len(wordlist) - 1)]
+        search_string = self.eng_dict[randint(0, len(self.eng_dict) - 1)]
         return search_string[0:5]
 
     def call_YT_API(self):
         ''' call the YouTube Music API, pull a random artist, update the data with
             the YouTube Music Video URL (used to call songlink API next) '''
-        YTMusicAPIdata = self.ytmusic.search(self.search_string, "songs", limit=200)
+        valid_response = False
+        while not valid_response:
+            YTMusicAPIdata = self.ytmusic.search(self.generate_search_string(), "songs", limit=200)
+            if YTMusicAPIdata <> []:
+                valid_response = True
+
         random_artist = YTMusicAPIdata[randint(0,len(YTMusicAPIdata) - 1)]
         random_artist.update({"YT_url": f"https://music.youtube.com/watch?v={random_artist.get('videoId')}",
                               "YT_embed": f"https://www.youtube.com/embed/{random_artist.get('videoId')}"})
-
-        #for k, v in random_artist.items():
-        #    print(k, v)
 
         return random_artist
 
