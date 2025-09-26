@@ -83,26 +83,36 @@ class RandomGenerator():
             {"key": "audiomack", "label": "Audiomack", "icon": "audiomack.svg"},
         ]
     
-        # Filter only services that exist in the API response
         links = []
-        for s in services:
-            link = data["linksByPlatform"].get(s["key"], {}).get("url")
-            if link:
-                links.append({**s, "url": link})
+        try:
+            # Attempt to use the linksByPlatform data from the songlink API response
+            # Filter only services that exist in the API response
+            for s in services:
+                link = data["linksByPlatform"].get(s["key"], {}).get("url")
+                if link:
+                    links.append({**s, "url": link})
     
-        # Thumbnail fallback (Spotify → Amazon → YouTube Music)
-        entities = data["entitiesByUniqueId"]
-        thumbnail = None
-        if "spotify" in data["linksByPlatform"]:
-            uid = data["linksByPlatform"]["spotify"]["entityUniqueId"]
-            thumbnail = entities.get(uid, {}).get("thumbnailUrl")
-        if not thumbnail and "amazonMusic" in data["linksByPlatform"]:
-            uid = data["linksByPlatform"]["amazonMusic"]["entityUniqueId"]
-            thumbnail = entities.get(uid, {}).get("thumbnailUrl")
-        if not thumbnail:
+            # Thumbnail fallback (Spotify → Amazon → YouTube Music)
+            entities = data["entitiesByUniqueId"]
+            thumbnail = None
+            if "spotify" in data["linksByPlatform"]:
+                uid = data["linksByPlatform"]["spotify"]["entityUniqueId"]
+                thumbnail = entities.get(uid, {}).get("thumbnailUrl")
+            if not thumbnail and "amazonMusic" in data["linksByPlatform"]:
+                uid = data["linksByPlatform"]["amazonMusic"]["entityUniqueId"]
+                thumbnail = entities.get(uid, {}).get("thumbnailUrl")
+            if not thumbnail:
+                thumbnail = self.random_result["thumbnails"][-1]["url"]
+
+        except KeyError:
+            # linksByPlatform data is missing from the songlink API response
+            # Default to using the YouTube API URL and Thumbnail data
+            links.append({**services[0], "url": self.random_result.get("YT_embed")})
+            links.append({**services[1], "url": self.random_result.get("YT_url")})
             thumbnail = self.random_result["thumbnails"][-1]["url"]
 
         self.random_result.update({"links": links, "thumbnail": thumbnail})
+
 
     def write_to_db(self):
         ''' pull out the data we need for our DB record and write it to the DB '''
