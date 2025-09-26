@@ -41,3 +41,6 @@ scripts/update_dailybop.sh
 
 # Ignore the neocities image file
 neocities.png
+
+# Ignore dev server script
+scripts/dev_server.sh
