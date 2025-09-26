@@ -46,7 +46,7 @@ class RandomGenerator():
         valid_response = False
         while not valid_response:
             YTMusicAPIdata = self.ytmusic.search(self.generate_search_string(), "songs", limit=200)
-            if YTMusicAPIdata <> []:
+            if YTMusicAPIdata != []:
                 valid_response = True
 
         random_artist = YTMusicAPIdata[randint(0,len(YTMusicAPIdata) - 1)]
