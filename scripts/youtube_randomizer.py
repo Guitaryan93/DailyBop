@@ -17,14 +17,6 @@ class RandomGenerator():
         self.eng_dict = self.load_english_dictionary()
         self.random_result = self.call_YT_API()
         self.get_streaming_services_urls()
-
-        #for k, v in self.random_result.items():
-        #    print(k, v)
-
-        #print("\n\n==========================================================================\n\n")
-
-        #print(json.dumps(self.random_result, indent=4))
-
         self.write_to_db()
 
     def load_english_dictionary(self):
