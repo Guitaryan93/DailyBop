@@ -48,4 +48,4 @@ scripts/dev_server.sh
 # No secrets allowed
 secrets.*
 oauth.json
-
+browser.json
