@@ -46,6 +46,6 @@ neocities.png
 scripts/dev_server.sh
 
 # No secrets allowed
-secrets.txt
+secrets.*
 oauth.json
 
