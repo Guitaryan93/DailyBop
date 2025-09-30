@@ -44,6 +44,8 @@ neocities.png
 
 # Ignore dev server script
 scripts/dev_server.sh
+update_playlist.sh
+update_playlist.py
 
 # No secrets allowed
 secrets.*
