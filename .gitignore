@@ -44,3 +44,8 @@ neocities.png
 
 # Ignore dev server script
 scripts/dev_server.sh
+
+# No secrets allowed
+secrets.txt
+oauth.json
+
