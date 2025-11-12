@@ -141,6 +141,19 @@ body {
     transform: scale(1.1);
 }
 
+.playlist-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(30deg, #0838c9 0%, #3e6cf7 100%);
+  border: none;
+  border-radius: 20px;
+  color: #eee;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
 /* Songlink acknowledgement */
 .songlink {
     font-size: 0.6em
