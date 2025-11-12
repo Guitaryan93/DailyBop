@@ -23,6 +23,7 @@ Thumbs.db
 
 # Documentation to ignore
 docs.txt
+ytmusicapi_browser_auth_documentation.rst.txt
 
 # Project Database should NEVER be on GitHub Repo
 database/
